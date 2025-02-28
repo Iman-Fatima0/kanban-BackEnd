@@ -3,19 +3,20 @@ const dotenv=require('dotenv');
 dotenv.config();
 const authenticationtoken=(req,res,next)=>
 {
-    const header=req.headers.authorization;
-    // console.log("header",header,req.headers)
-    const token=header.split('')[1];
     try{
+    const token=req.cookies.SubwayCookie;
+    console.log("token",token);
+   
     if(token==null)
     {
         return res.status(404).json({message:'No token provided'});
     }
-    const verified=jwt.verify(token,process.env.JWT_SECRET);
+    jwt.verify(token,process.env.JWT_SECRET,(err,data)=>{
     console.log(token);
-    req.user=verified;
-    req.status(202).json({message:"User verified"});
+    if (err) throw err;
+    req.user=data;
     next();
+    });
     }
     catch(error){
         console.log("invalid token",error);

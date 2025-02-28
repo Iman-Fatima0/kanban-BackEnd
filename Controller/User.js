@@ -26,6 +26,7 @@ const signup = async(req,res)=>
             role:newUser.role
             };
            const token= jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"1h"});
+           res.cookie("SubwayCookie",token,{expiresIn:"1h"});
             res.status(200).json({message:"User successfully signup",token:token,user:newUser});
 
         }
@@ -56,6 +57,7 @@ const login = async(req,res)=>
         const userData = {id:user._id,
             role:user.role};
         const token =jwt.sign(userData,process.env.JWT_SECRET,{expiresIn:"1h"});
+        res.cookie("SubwayCookie",token,{expiresIn:"1h"});
         res.json({message:"Login Sucessfully",token:token});
 
 

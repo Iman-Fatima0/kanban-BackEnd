@@ -14,7 +14,7 @@ status:{
         enum:['To Do','In Progress','Done'],
         default:'To Do'
     },
-priority:{
+  priority:{
     type:String,
     enum:['Low','Medium','High'],
     default:'Low'
@@ -22,8 +22,13 @@ priority:{
     },
     dueDate:{
         type:Date,
-        default:Date.now
+        required:true
     },
+    creationTimestamp:{
+        type:Date,
+        default:Date.now()
+    },
+
 
 }, {collection:'Tasks'});
     const Task=mongoose.model('Tasks',taskSchema);

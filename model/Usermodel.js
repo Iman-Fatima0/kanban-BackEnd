@@ -19,7 +19,12 @@ const UserSchema = new mongoose.Schema({
         required:true,
         enum:['Admin','User'],
         default:'User'
+    },
+    creationTimestamp:{
+        type:Date,
+        default:Date.now()
     }
+    
     
 },{collection:'Users'});
     const user=mongoose.model('Users',UserSchema);

@@ -25,7 +25,7 @@ const signup = async(req,res)=>
             role:newUser.role
             };
            const token= jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"1h"});
-           res.cookie("SubwayCookie",token,{expiresIn:"1h"});
+           res.cookie("SubwayCookie",token,{expiresIn:"3h"});
             res.status(200).json({message:"User successfully signup",token:token,user:newUser});
         }
 
@@ -39,7 +39,7 @@ const signup = async(req,res)=>
 const login = async(req,res)=>
 {
     try{
-        const {email,password,role}=req.body;
+        const {email,password}=req.body;
         const user= await User.findOne({email});
         if(!user)
         {
@@ -53,9 +53,13 @@ const login = async(req,res)=>
         }
 
         const userData = {id:user._id,
-            role:user.role};
+            role:user.role,
+            name:user.name,
+            email:user.email,
+            password:user.password,
+        };
         const token =jwt.sign(userData,process.env.JWT_SECRET,{expiresIn:"1h"});
-        res.cookie("SubwayCookie",token,{expiresIn:"1h"});
+        res.cookie("SubwayCookie",token,{expiresIn:"3h"});
         res.json({message:"Login Sucessfully",token:token});
 
 

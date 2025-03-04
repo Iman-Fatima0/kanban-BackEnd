@@ -10,7 +10,7 @@ const User= require('../model/Usermodel');
 const signup = async(req,res)=>
     {
         try{
-           const {name , email , password}=req.body;
+           const {name ,role, email , password}=req.body;
            const existinguser= await User.findOne({email});
            if(existinguser)
            {
@@ -19,8 +19,7 @@ const signup = async(req,res)=>
            }
            const salt = await bcrypt.genSalt(10);
            const hashedpassword = await bcrypt.hash(password,salt);
-            
-           const  newUser = await User.create({name, email, password:hashedpassword});
+           const  newUser = await User.create({ role, name, email, password:hashedpassword});
            const payload={
             id:newUser._id,
             role:newUser.role
@@ -28,7 +27,6 @@ const signup = async(req,res)=>
            const token= jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"1h"});
            res.cookie("SubwayCookie",token,{expiresIn:"1h"});
             res.status(200).json({message:"User successfully signup",token:token,user:newUser});
-
         }
 
         catch(error)

@@ -1,6 +1,5 @@
 const jwt=require('jsonwebtoken'); 
 const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
 const dotenv=require('dotenv');
 dotenv.config();
 
@@ -17,6 +16,10 @@ const signup = async(req,res)=>
             return res.status(400).json({message:"Email already in use"});
 
            }
+           if(!role ||  !email  ||  !password)
+           {
+            return res.status(400).json({message:"All fields are required"});
+           }
            const salt = await bcrypt.genSalt(10);
            const hashedpassword = await bcrypt.hash(password,salt);
            const  newUser = await User.create({ role, name, email, password:hashedpassword});
@@ -26,7 +29,7 @@ const signup = async(req,res)=>
             };
            const token= jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"1h"});
            res.cookie("SubwayCookie",token,{expiresIn:"3h"});
-            res.status(200).json({message:"User successfully signup",token:token,user:newUser});
+            res.status(200).json({message:"SignUp sucessfull",token:token,user:newUser});
         }
 
         catch(error)
@@ -40,12 +43,16 @@ const login = async(req,res)=>
 {
     try{
         const {email,password}=req.body;
+        if(!email  || !password)
+        {
+            return res.status(400).json({message:"All fields are required"});
+        }
         const user= await User.findOne({email});
         if(!user)
         {
             return res.status(404).json({message:"User not found"});
         }
-
+           
         const isPaswordValid= await bcrypt.compare(password,user.password);
         if(!isPaswordValid)
         {

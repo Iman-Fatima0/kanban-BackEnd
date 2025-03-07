@@ -1,23 +1,21 @@
-const jwt = require('jsonwebtoken'); 
-const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
+
 const dotenv = require('dotenv');
 dotenv.config();
 const Task = require('../model/Taskmodel');
 const { loggercreate } = require('../Controller/Logger');
 
-const createTask = async (req, res) => {
+const CreateTask = async (req, res) => {
     try {
         const taskData = req.body;
 
         console.log('Received task data:', taskData);
 
-        if (taskData._id) {
-            const existingTask = await Task.findById(taskData._id);
-            if (existingTask) {
-                return res.status(400).json({ error: 'Task with this _id already exists' });
-            }
-        }
+        // if (taskData._id) {
+        //     const existingTask = await Task.findById(taskData._id);
+        //     if (existingTask) {
+        //         return res.status(400).json({ error: 'Task with this _id already exists' });
+        //     }
+        // }
 
         const newTask = new Task(taskData);
         await newTask.save();
@@ -29,7 +27,7 @@ const createTask = async (req, res) => {
     }
 };
 
-const deleteTask = async (req, res) => {
+const DeleteTask = async (req, res) => {
     try {
         const id = req.params.id;
     
@@ -42,18 +40,18 @@ const deleteTask = async (req, res) => {
             message: "Task deleted",
             status: 'deleted',
             Task: taskdeleted._id,
-            timestamp: Date.now(),
+            createdAt: Date.now(),
             User: req.user.id,
         };
         loggercreate(obj);
-        return res.status(200).json({ message: "user successfully deleted task", taskdeleted });
+        return res.status(200).json({ message: "task deleted sucessfully", taskdeleted });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: "error deleting task", error });
     }
 };
 
-const updateTask = async (req, res) => {
+const UpdateTask = async (req, res) => {
     try {
         const id = req.params.id;
         const data = req.body;
@@ -66,25 +64,25 @@ const updateTask = async (req, res) => {
             message: "Task updated",
             status: 'modified',
             Task: taskupdated._id,
-            timestamp: Date.now(),
+            createdAt: Date.now(),
              User: req.user.id,
         };
-        loggercreate(obj);
-        return res.status(200).json({ message: "user successfully updated task", taskupdated });
+         loggercreate(obj);
+        return res.status(200).json({ message: "task updated successfully", taskupdated });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: "error updating task", error });
     }
 };
 
-const displaytask = async (req, res) => {
+const DisplayTask = async (req, res) => {
     try {
         const alltask = await Task.find();
         if(!alltask)
         {
             return res.status(400).json({ message: "No tasks found" });  
         }
-        return res.status(200).json({ message: "user successfully fetched tasks", alltask });
+        return res.status(200).json({ message: "tasks fetched successfully", alltask });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: "error fetching tasks", error });
@@ -92,8 +90,8 @@ const displaytask = async (req, res) => {
 };
 
 module.exports = {
-    createTask,
-    deleteTask,
-    updateTask,
-    displaytask
+    CreateTask,
+    DeleteTask,
+    UpdateTask,
+    DisplayTask
 };

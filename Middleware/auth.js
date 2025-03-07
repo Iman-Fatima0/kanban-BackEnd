@@ -1,6 +1,7 @@
 const jwt=require('jsonwebtoken');
 const dotenv=require('dotenv');
 dotenv.config();
+// require('dotenv').config();
 const authenticationtoken=(req,res,next)=>
 {
     try{

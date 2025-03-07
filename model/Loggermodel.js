@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 const LoggerSchema = new mongoose.Schema({
-    timestamp: {
+    createdAt: {
         type: Date,
         default: Date.now
     },
@@ -13,13 +13,13 @@ const LoggerSchema = new mongoose.Schema({
         required: true,
         enum:['created', 'modified', 'deleted']
     },
-    User:[{
+    User:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Users'
-     }],
-    Task:[{ type:mongoose.Schema.Types.ObjectId,
+     },
+    Task:{ type:mongoose.Schema.Types.ObjectId,
         ref: 'Tasks'
-     }]
+     }
 },{Collection:'Loggers'});
 
 const Logger=mongoose.model('Loggers',LoggerSchema);

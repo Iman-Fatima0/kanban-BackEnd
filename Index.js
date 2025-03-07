@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const bodyparser = require("body-parser");
 const db = require("./db");
-const session = require("express-session");
 const cookieparser = require("cookie-parser");
 const cors = require("cors");
+require("dotenv").config();
 
 app.use(cookieparser());
 app.use(bodyparser.json());
@@ -15,15 +15,15 @@ app.use(
   })
 );
 
-const UserRoutes = require("./Routes/UserRoutes");
+const UserRoutes = require("./Routes/AuthRoutes");
 const TaskRoutes = require("./Routes/TaskRoutes");
 const LoggerRoutes = require("./Routes/LoggerRoutes");
 
-app.use("/user", UserRoutes);
+app.use("/auth", UserRoutes);
 app.use("/task", TaskRoutes);
 app.use("/logger", LoggerRoutes);
 
-const port = 3001;
+const port =process.env.PORT ;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

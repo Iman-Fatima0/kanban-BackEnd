@@ -5,7 +5,7 @@ name:{
     type:String,
     required:true
 },
-Description:{
+description:{
     type:String,
     required:true
 },
@@ -24,7 +24,7 @@ status:{
         type:Date,
         required:true
     },
-    creationTimestamp:{
+    createdAt:{
         type:Date,
         default:Date.now()
     },
